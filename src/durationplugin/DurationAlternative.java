@@ -15,6 +15,7 @@ import hec.model.OutputVariable;
 import hec2.model.DataLocation;
 import hec2.plugin.model.ComputeOptions;
 import hec2.plugin.selfcontained.SelfContainedPluginAlt;
+import hec2.wat.client.WatFrame;
 import hec2.wat.model.tracking.OutputVariableImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -277,27 +278,29 @@ public class DurationAlternative extends SelfContainedPluginAlt{
         if(input==null){return 0;}
         double[] vals = input.values;
         Integer stepsPerDuration = Integer.MAX_VALUE;
+        Integer denominator = 0;
         if(durationInDays){
             Integer stepsPerDay = timeStepsPerDay(ePart);
             stepsPerDuration = stepsPerDay*duration;
+            denominator = duration;//sum up the value of flow throughout the day and divide by days.
         }else{
             stepsPerDuration = timeStepsPerDuration(ePart,duration);
+            denominator = stepsPerDuration;
         }
         if(stepsPerDuration == Integer.MAX_VALUE){return 0;}
         double maxVal = Double.MIN_VALUE;
         double avg = 0;
         double durationVolume = 0;
+        WatFrame fr = hec2.wat.WAT.getWatFrame();
         for(int i = 0; i<vals.length;i++){
             durationVolume += vals[i];
-            if(i==stepsPerDuration){
-                avg =durationVolume/stepsPerDuration;
-                //avg = durationVolume/duration;
+            if(i==(stepsPerDuration-1)){
+                avg =durationVolume/denominator;
                 maxVal = avg;
-            }else if(i>stepsPerDuration){
+            }else if(i>=stepsPerDuration){
                 double oldval = vals[i-stepsPerDuration];
                 durationVolume-=oldval;
-                avg =durationVolume/stepsPerDuration;
-                //avg = durationVolume/duration;
+                avg =durationVolume/denominator;
                 if(avg>maxVal)maxVal = avg;
             }
         }
