@@ -5,6 +5,7 @@
  */
 package durationplugin;
 
+import hec.io.TimeSeriesContainer;
 import hec2.model.DataLocation;
 import java.util.List;
 import org.jdom.Element;
@@ -15,8 +16,9 @@ import org.jdom.Element;
  */
 public interface IOutputVariable {
     public List<String> getParameters();
-    public List<String> getParematerValues();
-    public double Compute();//what if there are many output variables from the same data location (would this require multiple reads of the data?)
+    public List<Double> getParameterValues();
+    public DataLocation getDataLocation();
+    public double Compute(TimeSeriesContainer input);//what if there are many output variables from the same data location (would this require multiple reads of the data?)
     public Element writeToXML();
     public IOutputVariable readFromXML(Element ele, DataLocation dl);
 }
