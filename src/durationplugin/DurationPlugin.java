@@ -41,7 +41,7 @@ public class DurationPlugin extends AbstractSelfContainedWatPlugin<DurationAlter
         super();
         setName(PluginName);
         setProgramOrderItem(new ProgramOrderItem(PluginName,
-                "A plugin to compute duration maximums",
+                "A plugin to compute duration maximums and store them as output variables",
                 false,1,"shortname","Images/fda/wsp.png"));
         WatPluginManager.register(this);
     }
