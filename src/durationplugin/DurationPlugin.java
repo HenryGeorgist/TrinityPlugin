@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class DurationPlugin extends AbstractSelfContainedWatPlugin<DurationAlternative> implements CreatableWatPlugin, OutputPlugin  {
     public static final String PluginName = "Duration Plugin";
-    private static final String _pluginVersion = "1.0.0";
+    private static final String _pluginVersion = "1.0.1";
     private static final String _pluginSubDirectory = "DurationPlugin";
     private static final String _pluginExtension = ".dp";
     /**

@@ -323,6 +323,8 @@ public class DurationAlternative extends SelfContainedPluginAlt{
                 return 8;
             case "DAILY":
                 return 1;
+            case "1DAY":
+                return 1;
             case "1MIN":
                 return 1440;
             case "5MIN":
@@ -352,6 +354,12 @@ public class DurationAlternative extends SelfContainedPluginAlt{
                     return Integer.MAX_VALUE;
                 }
             case "DAILY":
+                if(durationInHours%24==0){
+                    return durationInHours/24;
+                }else{
+                    return Integer.MAX_VALUE;
+                }
+            case "1DAY":
                 if(durationInHours%24==0){
                     return durationInHours/24;
                 }else{
