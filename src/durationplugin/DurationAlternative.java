@@ -315,6 +315,23 @@ public class DurationAlternative extends SelfContainedPluginAlt{
         }
         return volume;
     }
+    private double ComputeDurationOverThreshold(TimeSeriesContainer input, Double threshold, boolean durationInDays, String ePart){
+        if(input==null){return 0;}
+        double[] vals = input.values;
+        Double multiplier = HoursPerTimestep(ePart); 
+        if(durationInDays){
+            multiplier = multiplier/24.0;
+        }
+        if(multiplier == Integer.MAX_VALUE){return 0;}
+        double duration = 0.0;
+        WatFrame fr = hec2.wat.WAT.getWatFrame();
+        for(int i = 0; i<vals.length;i++){
+            if (vals[i]>=threshold){
+                duration += 1*multiplier;
+            }
+        }
+        return duration;
+    }
     private int timeStepsPerDay(String ePart){
         switch(ePart.toUpperCase()){
             case "1HOUR":
@@ -337,7 +354,7 @@ public class DurationAlternative extends SelfContainedPluginAlt{
                 return Integer.MAX_VALUE;
         }
     }
-    private int timeStepsPerDuration(String ePart, Integer durationInHours){
+        private int timeStepsPerDuration(String ePart, Integer durationInHours){
         switch(ePart.toUpperCase()){
             case "1HOUR":
                 return 1*durationInHours;
@@ -373,6 +390,30 @@ public class DurationAlternative extends SelfContainedPluginAlt{
                 return 4*durationInHours;
             case "30MIN":
                 return 2*durationInHours;
+            default:
+                return Integer.MAX_VALUE;
+        }
+    }
+    private double HoursPerTimestep(String ePart){
+        switch(ePart.toUpperCase()){
+            case "1HOUR":
+                return 1.0;
+            case "3HOUR":
+                return 3.0;
+            case "6HOUR":
+                return 6.0;
+            case "DAILY":
+                return 24.0;
+            case "1DAY":
+                return 24.0;
+            case "1MIN":
+                return 1.0/60.0;
+            case "5MIN":
+                return 5.0/60.0;
+            case "15MIN":
+                return 15.0/60.0;
+            case "30MIN":
+                return 30.0/60.0;
             default:
                 return Integer.MAX_VALUE;
         }
@@ -438,7 +479,7 @@ public class DurationAlternative extends SelfContainedPluginAlt{
                             oimpl.setValue(ComputeTotal(tsc));
                             break;
                         case TimeStepsOverThreshold:
-                            oimpl.setValue(Double.NaN);//not implemented yet.
+                            oimpl.setValue(ComputeDurationOverThreshold(tsc,d.getThreshold(),d.durationInDays(),inputEPart));
                             break;
                         default:
                             oimpl.setValue(Double.NaN);
