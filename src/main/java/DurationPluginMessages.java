@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 
-package durationplugin;
-
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
