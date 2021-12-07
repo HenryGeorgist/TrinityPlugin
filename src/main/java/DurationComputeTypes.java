@@ -10,6 +10,7 @@
  */
 public enum DurationComputeTypes {
     DurationMax,
+    AccumDurationMax,
     MinValueInMaxWindow,//ValueExceededForSpecifiedDuration
     DurationTotal,
     TimeStepsOverThreshold
