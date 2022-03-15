@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-package durationplugin;
 import com.rma.util.I18n;
 import java.util.ResourceBundle;
 /**
@@ -12,7 +11,7 @@ import java.util.ResourceBundle;
  * @author WatPowerUser
  */
 public class DurationPluginI18n extends I18n{
-    public static final String BUNDLE_NAME = "durationplugin.DurationPluginProperties";
+    public static final String BUNDLE_NAME = "DurationPluginProperties";
     private static final ResourceBundle SAMPLE_RESOURCE_BUNDLE;
     private ResourceBundle _resourceBundle;
     static

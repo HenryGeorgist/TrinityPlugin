@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-package durationplugin;
 import com.rma.io.DssFileManagerImpl;
 import com.rma.io.RmaFile;
 import hec.heclib.dss.DSSPathname;
@@ -306,6 +305,39 @@ public class DurationAlternative extends SelfContainedPluginAlt{
         }
         return maxVal;
     }
+
+    private double ComputeAccumDurationMax(TimeSeriesContainer input, Integer duration, boolean durationInDays, String ePart){
+        if(input==null){return 0;}
+        double[] vals = input.values;
+        Integer stepsPerDuration = Integer.MAX_VALUE;
+        Integer denominator = 0;
+        if(durationInDays){
+            Integer stepsPerDay = timeStepsPerDay(ePart);
+            stepsPerDuration = stepsPerDay*duration;
+            denominator = duration;//sum up the value of flow throughout the day and divide by days.
+        }else{
+            stepsPerDuration = timeStepsPerDuration(ePart,duration);
+            denominator = stepsPerDuration;
+        }
+        if(stepsPerDuration == Integer.MAX_VALUE){return 0;}
+        double maxVal = Double.MIN_VALUE;
+        double avg = 0;
+        double durationVolume = 0;
+        WatFrame fr = hec2.wat.WAT.getWatFrame();
+        for(int i = 0; i<vals.length;i++){
+            durationVolume += vals[i];
+            if(i==(stepsPerDuration-1)){
+                maxVal =durationVolume;
+            }else if(i>=stepsPerDuration){
+                double oldval = vals[i-stepsPerDuration];
+                durationVolume-=oldval;
+                double maxVal2 =durationVolume;
+                if(maxVal2>maxVal)maxVal = maxVal2;
+            }
+        }
+        return maxVal;
+    }
+
     private double ComputeTotal(TimeSeriesContainer input){
         if(input==null){return 0;}
         double[] vals = input.values;
@@ -471,6 +503,9 @@ public class DurationAlternative extends SelfContainedPluginAlt{
                     switch (d.getComputeType()){
                         case DurationMax:
                             oimpl.setValue(ComputeDurationMax(tsc,d.getDuration(),d.durationInDays(),inputEPart));
+                            break;
+                        case AccumDurationMax:
+                            oimpl.setValue(ComputeAccumDurationMax(tsc,d.getDuration(),d.durationInDays(),inputEPart));
                             break;
                         case MinValueInMaxWindow:
                             oimpl.setValue(ComputeMinimumForMaximumWindow(tsc,d.getDuration(),d.durationInDays(),inputEPart));

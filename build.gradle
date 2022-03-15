@@ -1,0 +1,71 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'distribution'
+}
+
+//DEPENDENCY MANAGEMENT--
+repositories {
+    flatDir{
+        dirs ("lib")
+    }
+    maven {
+        url "https://www.hec.usace.army.mil/nexus/repository/maven-public/"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    implementation 'mil.army.usace.hec.wat:wat-hec-maps:v1.1-1.1.0.634-20210831.155203-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat-hec:v1.1-1.1.0.634-20210831.155137-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat-hecnf:v1.1-1.1.0.634-20210831.155125-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat-hecnf-pluginapi:v1.1-1.1.0.634-20210831.155131-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat-rma:v1.1-1.1.0.634-20210831.155144-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat-rmadev:v1.1-1.1.0.634-20210831.155151-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat:v1.1-1.1.0.634-20210831.155113-1@jar'
+    implementation 'mil.army.usace.hec.wat:wat-model:v1.1-1.1.0.634-20210831.155119-1@jar'
+    implementation 'mil.army.usace.hec:javaHeclib:7-HZ-win-x64@zip'
+    implementation group: 'org.jdom', name: 'jdom', version: '1.1.3'
+
+
+}
+
+//TESTING--
+test{
+    useJUnitPlatform()
+    testLogging{
+        test {
+            testLogging {
+                events "PASSED","FAILED", "SKIPPED"
+            }
+        }
+    }
+}
+tasks.withType(Test) {
+    useJUnitPlatform()
+    jvmArgs "--enable-preview"
+}
+
+//PUBLISHING--
+group = "mil.army.usace.hec"
+version "1.0"
+
+distributions {
+    main {
+        distributionBaseName = 'DCInvestigatorPlugin'
+        contents {
+            from 'src/WATPluginMarketplaceConfig'
+            from 'build/libs'
+        }
+    }
+}
+
+jar {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    manifest {
+        attributes "WatPluginMainClass": "DurationPlugin"
+    }
+}
+

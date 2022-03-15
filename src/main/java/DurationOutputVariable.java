@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package durationplugin;
 
 import hec.data.Parameter;
 import hec.model.OutputVariable;
@@ -69,6 +68,7 @@ public class DurationOutputVariable{
     }
         public DurationOutputVariable(DataLocation location, Double Threshold, DurationComputeTypes computeType){
         _location = location;
+        _threshold = Threshold;
         _duration = 1;
         _durationInDays = false;
         _computeType = computeType;

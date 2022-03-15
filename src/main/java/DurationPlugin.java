@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package durationplugin;
+
 import com.rma.factories.NewObjectFactory;
 import hec.data.Parameter;
 import hec.model.OutputVariable;
